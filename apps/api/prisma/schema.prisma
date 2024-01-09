@@ -10,12 +10,127 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Sample {
+// model Sample {
+//   id        Int      @id @default(autoincrement())
+//   name      String
+//   code      String   @unique
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   @@map("samples") // if you want to use snake_case format
+// }
+
+model User {
+  id String @id @default(uuid())
+  email String @unique
+  username String @unique
+  password String
+  firstname String
+  lastname String
+  role Role
+  referral_num String @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  events    Event[]
+  tickets   Ticket[]
+  reviews   Review[]
+  points    Point[]
+}
+
+enum Role {
+  Users
+  Organizers
+}
+
+model Event {
+  id         Int       @id @default(autoincrement())
+  organizer  User      @relation(fields: [organizerId], references: [id])
+  organizerId String
+  name       String
+  description String
+  location   String
+  startDate  DateTime
+  endDate    DateTime
+  price      Float
+  isFree     Boolean
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  tickets    Ticket[]
+  reviews    Review[]
+  promotions Promotion[]
+
+  // Relation to EventCategory
+  eventCategories EventCategory[]
+}
+
+model EventCategory {
+  event     Event    @relation(fields: [eventId], references: [id])
+  eventId   Int
+  category  Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+
+  @@id([eventId, categoryId])
+}
+
+model Category {
+  id          Int            @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  // Relation to EventCategory
+  eventCategories EventCategory[]
+}
+
+model Ticket {
   id        Int      @id @default(autoincrement())
-  name      String
-  code      String   @unique
+  event     Event    @relation(fields: [eventId], references: [id])
+  eventId   Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  type      String
+  price     Float
+  status    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  promotion Promotion? @relation(fields: [promotionId], references: [id])
+  promotionId Int?
+}
 
-  @@map("samples") // if you want to use snake_case format
+model Review {
+  id        Int      @id @default(autoincrement())
+  event     Event    @relation(fields: [eventId], references: [id])
+  eventId   Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Promotion {
+  id             Int      @id @default(autoincrement())
+  event          Event    @relation(fields: [eventId], references: [id])
+  eventId        Int
+  code           String
+  discountValue  Float
+  expirationDate DateTime
+  limit          Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  tickets        Ticket[]
+}
+
+model Point {
+  id            Int      @id @default(autoincrement())
+  user          User     @relation(fields: [userId], references: [id])
+  userId        String
+  points        Int
+  earnedDate    DateTime
+  expirationDate DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
