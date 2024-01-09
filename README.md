@@ -4,6 +4,9 @@ This project uses React.js with NextJS for the frontend, Express.js for the back
 
 ## Available Scripts
 
+Migrate Prisma database
+### `npx dotenv -e .env.development -- npx prisma migrate dev`
+
 ### `npm run dev`
 
 Runs the app in the development mode.
