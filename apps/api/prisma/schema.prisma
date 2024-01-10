@@ -28,7 +28,7 @@ model User {
   firstname String
   lastname String
   role Role
-  referral_num String @unique
+  referral_num String @unique @default(uuid())
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
