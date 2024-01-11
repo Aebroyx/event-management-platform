@@ -11,6 +11,7 @@ import cors from 'cors';
 import { PORT } from './config';
 import { SampleRouter } from './routers/sample.router';
 import { UserRouter } from './routers/user.router';
+import { EventRouter } from './routers/event.router';
 
 export default class App {
   private app: Express;
@@ -58,11 +59,16 @@ export default class App {
     //   res.send(`Hello, Purwadhika Student !`);
     // });
 
-    this.app.use('/samples', sampleRouter.getRouter());
+    // this.app.use('/samples', sampleRouter.getRouter());
 
+    //user
     const userRouter = new UserRouter();
 
     this.app.use('/users', userRouter.getRouter());
+
+    //event
+    const eventRouter = new EventRouter();
+    this.app.use('/events', eventRouter.getRouter());
   }
 
   public start(): void {
