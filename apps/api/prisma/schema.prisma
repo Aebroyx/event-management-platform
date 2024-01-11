@@ -39,8 +39,8 @@ model User {
 }
 
 enum Role {
-  Users
-  Organizers
+  User
+  Organizer
 }
 
 model Event {
