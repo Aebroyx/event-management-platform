@@ -77,7 +77,7 @@ export class UserController {
                 return res.status(400).json({ message: "Email or username already exists." });
             }
             console.error("Registration error:", error);
-            return res.status(500).json({ message: "Registration failed." });
+            return res.status(500).json(error.message);
         }
     }
 

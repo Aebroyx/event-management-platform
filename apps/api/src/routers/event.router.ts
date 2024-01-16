@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { EventController } from "@/controllers/event.controller";
 import { tokenVerify } from "@/middleware/tokenVerification";
+import { uploadValidator } from "@/middleware/uploadValidator";
 
 export class EventRouter {
     private router: Router;
@@ -13,7 +14,7 @@ export class EventRouter {
     }
   
     private initializeRoutes(): void {
-      this.router.post('/create', tokenVerify, this.eventController.postCreateEvent);
+      this.router.post('/create', tokenVerify, uploadValidator, this.eventController.postCreateEvent);
     }
   
     getRouter(): Router {

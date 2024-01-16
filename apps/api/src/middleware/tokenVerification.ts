@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { jwtVerify } from "../lib/jwt";
 
+export interface CustomRequest extends Request {
+    verifiedId: any
+}
 export const tokenVerify = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         // Get Token from Headers
@@ -16,9 +19,7 @@ export const tokenVerify = async (req: Request, res: Response, next: NextFunctio
             throw {message: "Unauthorized Access"}
         }
 
-        let verifiedId = payload.id;
-
-        verifiedId = req.body.userId;
+        req.headers.authorization = payload.id
 
         next()
     } catch (error: any) {
