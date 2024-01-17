@@ -12,6 +12,7 @@ import { PORT } from './config';
 import { SampleRouter } from './routers/sample.router';
 import { UserRouter } from './routers/user.router';
 import { EventRouter } from './routers/event.router';
+import { TicketRouter } from './routers/ticket.router';
 
 export default class App {
   private app: Express;
@@ -63,12 +64,15 @@ export default class App {
 
     //user
     const userRouter = new UserRouter();
-
     this.app.use('/users', userRouter.getRouter());
 
     //event
     const eventRouter = new EventRouter();
     this.app.use('/events', eventRouter.getRouter());
+
+    //ticket
+    const ticketRouter = new TicketRouter();
+    this.app.use('/tickets', ticketRouter.getRouter())
   }
 
   public start(): void {

@@ -41,7 +41,7 @@ export class UserController {
                     if (referrer) {
                         await prisma.point.updateMany({
                             where: { userId: referrer.id },
-                            data: { points: { increment: POINTS_FOR_REFERRAL } }, // Increment points by a defined amount
+                            data: { balance: { increment: POINTS_FOR_REFERRAL } }, // Increment points by a defined amount
                         });
                     }
                 }
@@ -50,7 +50,7 @@ export class UserController {
                 await prisma.point.create({
                     data: {
                         userId: user.id,
-                        points: INITIAL_USER_POINTS, // Assuming new users start with some initial points
+                        balance: INITIAL_USER_POINTS, // Assuming new users start with some initial points
                         earnedDate: new Date(),
                         expirationDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)), // Assuming points expire after 1 year
                     }

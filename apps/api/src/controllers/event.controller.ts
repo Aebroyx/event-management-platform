@@ -2,8 +2,11 @@ import { Request, Response, NextFunction } from 'express';
 import prisma from '@/prisma';
 import fs from 'fs';
 import { CustomRequest } from '@/middleware/tokenVerification';
+import { generatePromotionCode } from '@/lib/generatePromotionCode';
 
 export class EventController {
+
+    // Create Event
     async postCreateEvent(req: Request, res: Response, next: NextFunction) {
         try {
             const verifiedId: any = req.headers.authorization;
@@ -31,14 +34,17 @@ export class EventController {
             console.log(newEvent)
 
             // Create eventCategory Table
-            for (const category of categories) {   
-                await tx.eventCategory.create({
-                    data: {
-                        eventId: newEvent.id,
-                        categoryId: category
-                    }
+            const createEventCategory: any = []
+            categories.forEach((category: any) => {
+                createEventCategory.push({
+                    eventId: newEvent.id,
+                    categoryId: category
                 })
-            }
+            })
+            
+            await tx.eventCategory.create({
+                data: createEventCategory
+            })
 
             // Insert event Image(s)
             const createImages: any = []
@@ -69,6 +75,7 @@ export class EventController {
         }
     }
 
+    // Get All Event
     async getAllEvent(req: Request, res: Response, next: NextFunction) {
         try {
             const allEvent = await prisma.event.findMany({
@@ -78,13 +85,103 @@ export class EventController {
                 }
             })
 
-            res.status(200).send({
+            res.status(201).send({
                 error: false,
                 message: "Get All Event Success",
                 data: allEvent
             })
         } catch {
             next({message: "Get All Event Failed"})
+        }
+    }
+
+    // Get Event by ID
+    async getEventById(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { id } = req.params;
+            const event = await prisma.event.findUnique({
+                where: { id: Number(id) },
+                include: {
+                    eventCategories: true,
+                    eventImages: true
+                }
+            });
+
+            res.status(201).send({
+                error: false,
+                message: "Get Event Success",
+                data: event
+            })
+        } catch (error) {
+            next({message: "Get Event Failed"})
+        }
+    }
+
+    // Create Promotion
+    async postEventPromotion(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { eventId, discountValue, expirationDate, limit } = req.body;
+
+            // Validate input data
+            if (!eventId || discountValue === undefined || !expirationDate || limit === undefined) {
+                return res.status(400).json({
+                    message: "Missing required promotion details"
+                });
+            }
+
+            // Generate a unique promotion code
+            const code = generatePromotionCode(10);
+
+            // Create the promotion record
+            const promotion = await prisma.promotion.create({
+                data: {
+                    eventId,
+                    code,
+                    discountValue,
+                    expirationDate: new Date(expirationDate), // Ensure this is a valid date
+                    limit,
+                }
+            });
+
+            // Respond with success and the created promotion
+            res.status(201).send({
+                message: "Promotion created successfully",
+                data: promotion
+            });
+        } catch (error) {
+            next({message: "Create Promotion Failed"})
+        }
+    }
+
+    // Create Review
+    async postEventReview(req: Request, res: Response, next: NextFunction) {
+        try {
+            const verifiedId: any = req.headers.authorization;
+            const { eventId, comment, rating } = req.body;
+
+            // Validate input data
+            if (!eventId || !comment || rating === undefined) {
+                return res.status(400).send({
+                    message: "Missing required review details"
+                });
+            }
+
+            // Create the review record
+            const review = await prisma.review.create({
+                data: {
+                    userId: verifiedId,
+                    eventId,
+                    comment,
+                    rating
+                }
+            });
+
+            res.status(201).send({
+                message: "Review created successfully",
+                data: review
+            });
+        } catch (error) {
+            next({message: "Create Review Failed"})
         }
     }
 }
