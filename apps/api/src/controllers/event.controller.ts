@@ -68,4 +68,23 @@ export class EventController {
             next({message: "Create Product Failed"}) 
         }
     }
+
+    async getAllEvent(req: Request, res: Response, next: NextFunction) {
+        try {
+            const allEvent = await prisma.event.findMany({
+                include: {
+                    eventCategories: true,
+                    eventImages: true
+                }
+            })
+
+            res.status(200).send({
+                error: false,
+                message: "Get All Event Success",
+                data: allEvent
+            })
+        } catch {
+            next({message: "Get All Event Failed"})
+        }
+    }
 }

@@ -15,6 +15,7 @@ export class EventRouter {
   
     private initializeRoutes(): void {
       this.router.post('/create', tokenVerify, uploadValidator, this.eventController.postCreateEvent);
+      this.router.get('/', this.eventController.getAllEvent)
     }
   
     getRouter(): Router {
