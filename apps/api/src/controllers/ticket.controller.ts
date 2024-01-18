@@ -8,9 +8,9 @@ export class TicketController {
             const { eventId, promotionCode, quantity, usePoints} = req.body
 
             // Validate input data
-            if (!eventId || !promotionCode) {
+            if (!eventId) {
                 return res.status(400).json({
-                    message: "Missing required ticket details"
+                    message: "Missing required event details"
                 });
             }
 
@@ -41,9 +41,6 @@ export class TicketController {
             let transaction: any = null
 
             // Testing Data
-            console.log(verifiedId)
-            console.log(event)
-            console.log(user)
 
             // Create the ticket record
             await prisma.$transaction(async (tx) => {
@@ -222,7 +219,7 @@ export class TicketController {
                         })
                     // if user don't use promotion code
                     } else {
-                        let newPrice = event?.price - user.point[0].balance
+                        let newPrice = event.price
 
                         transaction = await tx.transaction.create({
                             data: {
@@ -241,6 +238,7 @@ export class TicketController {
                                 }
                             })  
                         }
+                        console.log(transaction)
                         await tx.event.update({
                             where: {
                                 id: Number(eventId)
