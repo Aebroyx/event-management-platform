@@ -62,6 +62,9 @@ export default class App {
 
     // this.app.use('/samples', sampleRouter.getRouter());
 
+    //public image
+    this.app.use("*/image", express.static("public/image"));
+
     //user
     const userRouter = new UserRouter();
     this.app.use('/users', userRouter.getRouter());

@@ -49,7 +49,7 @@ model Event {
   organizer  User      @relation(fields: [organizerId], references: [id])
   organizerId String
   name       String
-  description String
+  description String @db.Text
   location   String
   startDate  DateTime
   endDate    DateTime

@@ -10,8 +10,6 @@ export class EventController {
     async postCreateEvent(req: Request, res: Response, next: NextFunction) {
         try {
             const verifiedId: any = req.headers.authorization;
-            console.log('hello')
-            console.log(verifiedId)
             const { name, description, location, startDate, endDate, price, stock, isFree, categories } = JSON.parse(req.body.data);
 
             await prisma.$transaction(async (tx) => {
@@ -31,8 +29,6 @@ export class EventController {
                 }
             })
 
-            console.log(newEvent)
-
             // Create eventCategory Table
             const createEventCategory: any = []
             categories.forEach((category: any) => {
@@ -41,8 +37,10 @@ export class EventController {
                     categoryId: category
                 })
             })
+
+            console.log(createEventCategory)
             
-            await tx.eventCategory.create({
+            await tx.eventCategory.createMany({
                 data: createEventCategory
             })
 
@@ -80,7 +78,7 @@ export class EventController {
         try {
             const allEvent = await prisma.event.findMany({
                 include: {
-                    eventCategories: true,
+                    eventCategories: {include: {category: true}},
                     eventImages: true
                 }
             })
