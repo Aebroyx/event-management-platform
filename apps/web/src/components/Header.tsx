@@ -1,5 +1,27 @@
+"use client"
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+
+// Redux
+import { setUser } from "@/redux/slice/userSlice"
+import { useDispatch, useSelector } from "react-redux"
+
+// Cookies
+import { getCookies, delCookies } from "@/features/cookies"
+
 export const Header = () => {
+  const dataUser = useSelector((state : any) => state.user)
+  
+  const dispatch = useDispatch()
+
+  useQuery({
+    queryFn: async () => {
+      const {value} = await getCookies()
+
+      const res = await axios.post('http://localhost:8000/users/keeplogin', {})
+    }
+  })
+
   return(
     <>
       <nav>
