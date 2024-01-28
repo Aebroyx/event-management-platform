@@ -16,7 +16,7 @@ export const EventCard = async() => {
     const {data: events} = await fetchEvents()
     return (
         <>
-        <h1 className='text-3xl font-bold py-10'> Upcoming Events </h1>
+        <h1 className='text-3xl font-bold py-10'>Upcoming Events</h1>
             <div className='flex flex-wrap gap-5'>
             {
                 events.map((item: any, index: any) => {

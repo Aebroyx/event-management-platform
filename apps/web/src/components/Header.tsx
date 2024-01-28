@@ -12,42 +12,11 @@ import { getCookies, delCookies } from "@/features/cookies"
 
 export const Header = () => {
 
-  // const dataUser = useSelector((state: any) => state.user)
-
-  const dataUser = ''
+  const dataUser = useSelector((state: any) => state.user)
   
   const dispatch = useDispatch();
-
-  // console.log(username)
-
-  // useQuery({
-  //   queryKey: ['keeplogin', { value: dataUser.user}], // Provide a queryKey for cache invalidation, refetching, etc.
-  //   queryFn: async () => {
-  //     const { value }: any = await getCookies(); // Ensure getCookies returns an object with a 'value' string
-
-  //     if (!value) {
-  //       throw new Error('No token found');
-  //     }
-
-  //     const res = await axios.post(
-  //       'http://localhost:8000/users/keeplogin',
-  //       null,
-  //       {
-  //         headers: {
-  //           Authorization: value
-  //         },
-  //       }
-  //     );
-
-  //     console.log(res)
-
-  //     // Dispatch the user data to your store
-  //     // Make sure the response data structure is correct
-  //     dispatch(setUser(res.data.data.username));
-  //   }
-  // });
-
-  const username = useQuery({
+  
+  const response = useQuery({
     queryKey: ['keeplogin'],
     queryFn: async () => {
       const { value }: any = await getCookies();
@@ -60,20 +29,17 @@ export const Header = () => {
           }
         }
       )
-      return res.data
+      dispatch(setUser(res.data.data.username))
+      return res.data.data
     }
   })
+
+  const balance = response.data?.point?.balance
 
   const onLogout = async() =>{
     await delCookies()
     dispatch(setUser(null))
   }
-
-  console.log(username)
-
-  dispatch(setUser("dummyuser"))
-
-  console.log(dataUser)
 
   return(
     <>
@@ -92,12 +58,14 @@ export const Header = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
               </button>
             </div>
-            <div>
               {
-                dataUser ? (
+                dataUser.user ? (
                   <>
-                    <h1>{dataUser}</h1>
-                    <button onClick={onLogout} className="btn btn-ghost">Logout</button>
+                    <div className="flex flex-col">
+                      <h1 className="font-bold">{ dataUser.user }</h1>
+                      <h1 className="text-sm">Points: {balance}</h1>
+                    </div>
+                      <button onClick={onLogout} className="btn btn-ghost">Logout</button>
                   </>
                 ) : (
                   <>
@@ -110,7 +78,6 @@ export const Header = () => {
                   </>
                 )
               }
-            </div>
           </div>
         </div>
       </div>

@@ -135,13 +135,16 @@ export class UserController {
             }
 
             const user = await prisma.user.findUnique({
-                where: { id: String(verifiedId) }
+                where: { id: String(verifiedId) },
+                include: {
+                    point: true
+                }
             })
 
             res.status(200).json({
                 error: false,
                 message: "Keep Login Success",
-                data: user.username
+                data: user
             })
         } catch (error) {
             next({message: "Keep Login Failed"})
