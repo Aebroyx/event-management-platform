@@ -11,10 +11,12 @@ export class EventController {
         try {
             const verifiedId: any = req.headers.authorization;
             const { name, description, location, startDate, endDate, price, stock, isFree, categories } = JSON.parse(req.body.data);
+            console.log(req.body.data)
+            console.log(verifiedId)
 
-            console.log(verifiedId, name, description, location, startDate, endDate, price, stock, isFree, categories)
+            console.log(name, description, location, startDate, endDate, price, stock, isFree, categories)
 
-            await prisma.$transaction(async (tx) => {
+         await prisma.$transaction(async (tx) => {
 
             // Create Event Table
             const newEvent = await tx.event.create({
