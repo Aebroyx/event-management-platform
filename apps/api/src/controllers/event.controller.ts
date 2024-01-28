@@ -12,6 +12,8 @@ export class EventController {
             const verifiedId: any = req.headers.authorization;
             const { name, description, location, startDate, endDate, price, stock, isFree, categories } = JSON.parse(req.body.data);
 
+            console.log(verifiedId, name, description, location, startDate, endDate, price, stock, isFree, categories)
+
             await prisma.$transaction(async (tx) => {
 
             // Create Event Table
@@ -61,14 +63,19 @@ export class EventController {
                 })
             }
         })
-
         res.status(201).send({
             error: false,
             message: "Create Event Success",
             data: null
         })
         } catch (error) {
-            //console.log(error)
+            console.log(error)
+            if(req.file) {
+                const filesArray = Array.isArray(req.files) ? req.files : req.files['uploadImg'];
+                filesArray.forEach((item: any) => {
+                    fs.rmSync(item.path)
+                })
+            }
             next({message: "Create Product Failed"}) 
         }
     }
