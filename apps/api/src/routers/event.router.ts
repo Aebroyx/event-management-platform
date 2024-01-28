@@ -16,6 +16,7 @@ export class EventRouter {
     private initializeRoutes(): void {
       this.router.post('/create', tokenVerifyOrg, uploadValidator, this.eventController.postCreateEvent);
       this.router.get('/', this.eventController.getAllEvent)
+      this.router.get('/category', this.eventController.getAllCategory)
       this.router.get('/:id', this.eventController.getEventById)
       this.router.post('/promotion', tokenVerifyOrg, this.eventController.postEventPromotion)
       this.router.post('/review', tokenVerifyUsr, this.eventController.postEventReview)

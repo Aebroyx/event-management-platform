@@ -29,7 +29,7 @@ export class EventController {
                   endDate: new Date(endDate),
                   price,
                   stock,
-                  isFree
+                  isFree: Boolean(isFree)
                 }
             })
 
@@ -102,6 +102,20 @@ export class EventController {
         }
     }
 
+        // Get All Category
+        async getAllCategory(req: Request, res: Response, next: NextFunction) {
+            try {
+                const allCategory = await prisma.category.findMany()
+                res.status(201).send({
+                    error: false,
+                    message: "Get Category Success",
+                    data: allCategory
+                })
+            } catch (error) {
+                next({message: "Get Category Failed"})
+            }
+        }
+
     // Get Event by ID
     async getEventById(req: Request, res: Response, next: NextFunction) {
         try {
@@ -110,7 +124,16 @@ export class EventController {
                 where: { id: Number(id) },
                 include: {
                     eventCategories: true,
-                    eventImages: true
+                    eventImages: true,
+                    reviews: {
+                        include: {
+                            user: {
+                                select: {
+                                    username: true
+                                }
+                            }
+                        }
+                    }
                 }
             });
 
@@ -179,7 +202,7 @@ export class EventController {
                     userId: verifiedId,
                     eventId,
                     comment,
-                    rating
+                    rating: Number(rating),
                 }
             });
 

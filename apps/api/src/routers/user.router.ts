@@ -16,6 +16,7 @@ export class UserRouter {
       this.router.post('/register', this.userController.postRegister);
       this.router.post('/login', this.userController.postLogin);
       this.router.post('/keeplogin', tokenVerify, this.userController.postKeepLogin);
+      this.router.post('/profile', tokenVerify, this.userController.postGetUser);
     }
   
     getRouter(): Router {

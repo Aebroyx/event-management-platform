@@ -43,7 +43,7 @@ export const Header = () => {
 
   return(
     <>
-      <nav>
+      <nav className='sticky top-0 z-50'>
       <div className="navbar bg-base-200 h-28">
         <div className="navbar-start">
           <Link href="/"className="btn btn-ghost text-xl">BookYourTix</Link>
@@ -62,7 +62,7 @@ export const Header = () => {
                 dataUser.user ? (
                   <>
                     <div className="flex flex-col">
-                      <h1 className="font-bold">{ dataUser.user }</h1>
+                      <Link href="/profile" className="font-bold">{ dataUser.user }</Link>
                       <h1 className="text-sm">Points: {balance}</h1>
                     </div>
                       <button onClick={onLogout} className="btn btn-ghost">Logout</button>

@@ -150,4 +150,23 @@ export class UserController {
             next({message: "Keep Login Failed"})
         }
     }
+
+    async postGetUser(req: Request, res: Response, next: NextFunction) {
+        try {
+            const verifiedId: any = req.headers.authorization;
+            const user = await prisma.user.findUnique({
+                where: { id: String(verifiedId) },
+                include: {
+                    point: true
+                }
+            })
+            res.status(200).json({
+                error: false,
+                message: "Get User Success",
+                data: user
+            })
+        } catch (error) {
+            next({message: "Get User Failed"})
+        }
+    }
 }

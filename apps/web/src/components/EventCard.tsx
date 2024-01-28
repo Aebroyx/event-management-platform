@@ -24,7 +24,9 @@ export const EventCard = async() => {
                         <>
                             <Link href={`/events/${item.id}`}>
                                 <div className="card w-96 bg-base-100 shadow-xl">
-                                <figure><Image src={`http://localhost:8000/public/image/${item.eventImages[0].url}`} alt={item.name} width={300} height={300}></Image></figure>
+                                    <figure className='avatar'>
+                                        <Image className=' max-h-[300px] max-w-[380px] rounded' src={`http://localhost:8000/public/image/${item.eventImages[0].url}`} alt={item.name} width={300} height={300}></Image>
+                                    </figure>
                                     <div className="card-body">
                                         <h2 className="card-title">
                                         {item.name}
