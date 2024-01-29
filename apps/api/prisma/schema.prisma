@@ -19,3 +19,141 @@ model Sample {
 
   @@map("samples") // if you want to use snake_case format
 }
+
+model User {
+  id String @id @default(uuid())
+  email String @unique
+  username String @unique
+  password String
+  firstname String
+  lastname String
+  role Role
+  referral_num String @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  point Point?
+
+  events    Event[]
+  tickets   Ticket[]
+  reviews   Review[]
+  transactions Transaction[]
+}
+
+enum Role {
+  User
+  Organizer
+}
+
+model Event {
+  id         Int       @id @default(autoincrement())
+  organizer  User      @relation(fields: [organizerId], references: [id])
+  organizerId String
+  name       String
+  description String @db.Text
+  location   String
+  startDate  DateTime
+  endDate    DateTime
+  isFree     Boolean
+  price      Float
+  stock      Int
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  tickets    Ticket[]
+  reviews    Review[]
+  promotions Promotion[]
+
+  // Relation to EventCategory
+  eventCategories EventCategory[]
+
+  // Relation to EventImages
+  eventImages EventImages[]
+}
+
+model EventImages {
+  id String @id @default(uuid())
+  url String
+
+  Event Event @relation(fields: [eventId], references: [id])
+  eventId Int
+}
+
+model EventCategory {
+  event     Event    @relation(fields: [eventId], references: [id])
+  eventId   Int
+  category  Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+
+  @@id([eventId, categoryId])
+}
+
+model Category {
+  id          Int            @id @default(autoincrement())
+  name        String
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt @default(now())
+
+  // Relation to EventCategory
+  eventCategories EventCategory[]
+}
+
+model Ticket {
+  id        String      @id @default(uuid())
+  event     Event    @relation(fields: [eventId], references: [id])
+  eventId   Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  transaction Transaction @relation(fields: [transactionId], references: [id])
+  transactionId String
+  price     Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  promotion Promotion? @relation(fields: [promotionId], references: [id])
+  promotionId Int?
+}
+
+model Transaction {
+  id        String      @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  amount    Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tickets Ticket[]
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  event     Event    @relation(fields: [eventId], references: [id])
+  eventId   Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  rating    Int
+  comment   String   @db.LongText
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Promotion {
+  id             Int      @id @default(autoincrement())
+  event          Event    @relation(fields: [eventId], references: [id])
+  eventId        Int
+  code           String
+  discountValue  Float
+  expirationDate DateTime
+  limit          Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  tickets        Ticket[]
+}
+
+model Point {
+  id            String      @id @default(uuid())
+  user          User     @relation(fields: [userId], references: [id])
+  userId        String   @unique
+  balance       Int @default(0)
+  earnedDate    DateTime
+  expirationDate DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

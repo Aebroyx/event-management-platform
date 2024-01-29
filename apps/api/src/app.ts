@@ -10,6 +10,9 @@ import express, {
 import cors from 'cors';
 import { PORT } from './config';
 import { SampleRouter } from './routers/sample.router';
+import { UserRouter } from './routers/user.router';
+import { EventRouter } from './routers/event.router';
+import { TicketRouter } from './routers/ticket.router';
 
 export default class App {
   private app: Express;
@@ -53,11 +56,26 @@ export default class App {
   private routes(): void {
     const sampleRouter = new SampleRouter();
 
-    this.app.get('/', (req: Request, res: Response) => {
-      res.send(`Hello, Purwadhika Student !`);
-    });
+    // this.app.get('/', (req: Request, res: Response) => {
+    //   res.send(`Hello, Purwadhika Student !`);
+    // });
 
-    this.app.use('/samples', sampleRouter.getRouter());
+    // this.app.use('/samples', sampleRouter.getRouter());
+
+    //public image
+    this.app.use("*/image", express.static("public/image"));
+
+    //user
+    const userRouter = new UserRouter();
+    this.app.use('/users', userRouter.getRouter());
+
+    //event
+    const eventRouter = new EventRouter();
+    this.app.use('/events', eventRouter.getRouter());
+
+    //ticket
+    const ticketRouter = new TicketRouter();
+    this.app.use('/tickets', ticketRouter.getRouter())
   }
 
   public start(): void {
