@@ -315,7 +315,7 @@ export default function CreateEvent() {
                         className="input border-2 bg-base-100 w-full" 
                         />
                     </label>
-                    <button type="submit" className="bg-gray-300 hover:bg-gray-400 rounded-md w-[320px] h-8">Register</button>
+                    <button type="submit" className="bg-gray-300 hover:bg-gray-400 rounded-md w-[320px] h-8">Create Event</button>
                 </div>
             </div>
           </div>

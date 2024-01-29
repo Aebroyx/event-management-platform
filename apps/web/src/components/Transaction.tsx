@@ -23,11 +23,13 @@ export default function Transaction() {
                 return res
             }
         })
-        
+
         if(response.isLoading) return(<p>Loading...</p>)
         if(response.isError) return(<p>Error...</p>)
 
         const transaction = [...response.data?.data.data]
+
+        console.log(transaction)
 
     return (
         <>
@@ -87,7 +89,7 @@ export default function Transaction() {
                                     <tbody>
                                     {/* row 1 */}
                                     {
-                                        transaction[0].tickets.map((item: any, index: any) => {
+                                        transaction[0]?.tickets?.map((item: any, index: any) => {
                                             return(
                                                 <>
                                                     <tr>
