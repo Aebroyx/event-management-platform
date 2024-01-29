@@ -14,6 +14,7 @@ export class TicketRouter {
 
     private initializeRoutes(): void {
         this.router.post('/purchase', tokenVerifyUsr, this.ticketController.postTicket)
+        this.router.post('/transaction', tokenVerifyUsr, this.ticketController.getTicketbyId)
     }
 
     getRouter(): Router {

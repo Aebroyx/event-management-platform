@@ -181,7 +181,24 @@ export default function Register() {
                     </div>
                   </div>
               </div>
-                <div className="flex items-center justify-center mt-5">
+                <div className="flex flex-col items-center justify-center mt-5">
+                    <div>
+                      <div className="text-lg">
+                        Referral Code
+                      </div>
+                      <div>
+                        <Field
+                          name="referral"
+                          type="text">
+                          {({field}: any) => (
+                              <input {...field} type="text" placeholder="Input Referral Code" className="rounded-md border border-black pl-2 mb-5 w-[320px] h-8"/>
+                          )}
+                        </Field>
+                        <ErrorMessage
+                          name="referral"
+                          />
+                      </div>
+                    </div>
                     <button type="submit" className="bg-gray-300 hover:bg-gray-400 rounded-md w-[320px] h-8">Register</button>
                 </div>
             </div>

@@ -95,7 +95,7 @@ export const Review = ({eventId}: any) => {
                             </div>
                         </label>
                         <div className="flex justify-center mb-4">
-                            <button className="btn btn-primary w-[300px]">Submit</button>
+                            <button type="submit" className="btn btn-primary w-[300px]">Submit</button>
                         </div>
                     </div>
                 </div>

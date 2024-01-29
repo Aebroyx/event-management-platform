@@ -262,4 +262,31 @@ export class TicketController {
             next({message: "Transaction Failed"})
         }
     }
+
+    // Get Ticket by user ID
+    async getTicketbyId (req: Request, res: Response, next: NextFunction) {
+        try {
+            const verifiedId: any = req.headers.authorization
+            const tickets = await prisma.transaction.findMany({
+                where: {
+                    userId: String(verifiedId)
+                },
+                include: {
+                    tickets: {
+                        include: {
+                            event: true
+                        }
+                    }
+                }
+            })
+
+            res.status(201).send({
+                error: false,
+                message: "Get Ticket Success",
+                data: tickets
+            })
+        } catch (error) {
+            next({message: "Get Ticket Failed"})
+        }
+    }
 }

@@ -4,6 +4,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import { Review } from '@/components/Review';
 import { FaUser, FaStar } from "react-icons/fa";
 import moment from 'moment';
+import { PurchaseTix } from '@/components/PurchaseTix';
 
 const fetchEventById = async({id}: any) => {
     try {
@@ -57,8 +58,7 @@ export default async function Page({params}: any) {
                         <hr/>
                         <div className='flex justify-between py-6 px-4'>
                             <p className='text-2xl font-bold'>Rp.{events.price.toLocaleString('id-ID')}</p>
-                            
-                            <button className='btn btn-primary'>Buy Ticket(s)</button>
+                            <PurchaseTix eventId={events.id}/>
                         </div>
                     </div>
                 </div>
