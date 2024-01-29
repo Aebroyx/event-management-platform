@@ -8,16 +8,19 @@ import axios from "axios";
 import { getCookies } from "@/features/cookies";
 import { useRouter } from "next/navigation"
 
-export const PurchaseTix = ({eventId}: any) => {
+export const PurchaseTix = ({id}: any) => {
     const router = useRouter()
 
     const purchaseSchema = Yup.object().shape({
         quantity: Yup.number().required(),
     })
 
+    console.log(id)
+
     const {mutate} = useMutation({
         mutationFn: async({eventId, promotionCode, quantity, usePoints}: any) => {
             const {value}: any = await getCookies();
+            console.log(eventId, promotionCode, quantity, usePoints)
             await axios.post(`http://localhost:8000/tickets/purchase`, {
                 eventId, promotionCode, quantity, usePoints
             }, {
@@ -45,7 +48,7 @@ export const PurchaseTix = ({eventId}: any) => {
                 onSubmit={async(values) => {
                     const {eventId, promotionCode, quantity, usePoints} = values
 
-                    await mutate({eventId, promotionCode: null, quantity, usePoints: false})
+                    await mutate({eventId: id, promotionCode: null, quantity, usePoints: false})
                 }}
             >
                 <Form>

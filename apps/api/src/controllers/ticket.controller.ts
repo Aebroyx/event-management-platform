@@ -182,7 +182,7 @@ export class TicketController {
                 // if user don't use points
                 } else if (usePoints == false) {
                     // if user use promotion code
-                    if (promotionCode == event?.promotions[0]?.code) {
+                    if (promotionCode == true && promotionCode == event?.promotions[0]?.code) {
                         let newPrice = event?.price * event?.promotions[0]?.discountValue/100
 
                         transaction = await tx.transaction.create({

@@ -58,7 +58,7 @@ export default async function Page({params}: any) {
                         <hr/>
                         <div className='flex justify-between py-6 px-4'>
                             <p className='text-2xl font-bold'>Rp.{events.price.toLocaleString('id-ID')}</p>
-                            <PurchaseTix eventId={events.id}/>
+                            <PurchaseTix id={events.id}/>
                         </div>
                     </div>
                 </div>
